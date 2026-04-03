@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import welcomeImg from '@/assets/welcome.jpg';
 
@@ -37,9 +38,9 @@ export default function WelcomeSection() {
               <a href="#conference" className="btn-solid-custom">
                 Quiver's Conference
               </a>
-              <a href="#about" className="btn-outline-custom">
+              <Link to="/about-jesse" className="btn-outline-custom">
                 Our President
-              </a>
+              </Link>
             </div>
           </div>
         </div>

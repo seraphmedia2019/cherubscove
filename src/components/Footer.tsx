@@ -1,11 +1,12 @@
+import { Link } from 'react-router-dom';
 import logoWhite from '@/assets/logo/logo-white.png';
 
 const footerLinks = [
-  { label: 'About', href: '#welcome' },
-  { label: 'Conference', href: '#conference' },
-  { label: 'Resources', href: '#resources' },
-  { label: 'Register', href: '#events' },
-  { label: 'Contact', href: '#connect' },
+  { label: 'Home', href: '/' },
+  { label: 'Conference', href: '/#conference' },
+  { label: 'Resources', href: '/resources' },
+  { label: 'Register', href: '/register' },
+  { label: 'Contact', href: '/connect' },
 ];
 
 function FacebookIcon() {
@@ -70,14 +71,14 @@ export default function Footer() {
           {/* Links */}
           <div className="flex gap-6 flex-wrap justify-center">
             {footerLinks.map((link, i) => (
-              <a
+              <Link
                 key={i}
-                href={link.href}
+                to={link.href}
                 className="text-[11px] font-bold tracking-[1.5px] uppercase transition-colors duration-250 hover:text-primary"
                 style={{ color: 'rgba(255,255,255,0.45)' }}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
