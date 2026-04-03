@@ -77,7 +77,7 @@ export default function ConferenceSection() {
               <div className="text-[10px] tracking-[3px] uppercase text-text-light mb-3">
                 Join us next
               </div>
-              <a href="#events" className="btn-solid-custom text-[10px] px-5 py-2.5">
+              <Link to="/register" className="btn-solid-custom text-[10px] px-5 py-2.5">
                 Register Free
               </a>
             </div>
