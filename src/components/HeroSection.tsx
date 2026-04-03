@@ -70,12 +70,12 @@ export default function HeroSection() {
             <span className="text-[11px] tracking-[1.5px] opacity-70 font-body">Isaiah 32:2</span>
           </p>
           <div className="flex gap-4 flex-wrap">
-            <a href="#events" className="btn-primary-custom">
+            <Link to="/register" className="btn-primary-custom">
               Register for Quiver's 2026
-            </a>
-            <a href="#about" className="btn-ghost-custom">
+            </Link>
+            <Link to="/about-jesse" className="btn-ghost-custom">
               Meet Jesse Falodun
-            </a>
+            </Link>
           </div>
         </div>
 
