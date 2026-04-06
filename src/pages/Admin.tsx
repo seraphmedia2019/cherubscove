@@ -71,9 +71,9 @@ export default function AdminPage() {
       setIsLoading(true);
       const [{ data: eventsData }, { data: downloadsData }, { data: galleryData }, { data: settingsData }] =
         await Promise.all([
-          supabase.from<EventRecord>('events').select('*').order('date', { ascending: false }),
-          supabase.from<DownloadRecord>('downloads').select('*').order('label'),
-          supabase.from<GalleryRecord>('gallery').select('*').order('title'),
+          supabase.from('events').select('*').order('date', { ascending: false }),
+          supabase.from('downloads').select('*').order('label'),
+          supabase.from('gallery').select('*').order('title'),
           supabase.from('site_settings').select('*'),
         ]);
 
