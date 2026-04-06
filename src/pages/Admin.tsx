@@ -114,6 +114,12 @@ export default function AdminPage() {
 
   const handleAuth = async (mode: 'signIn' | 'signUp') => {
     setAuthNotice('');
+
+    if (!email.trim() || !password.trim()) {
+      setAuthNotice('Please enter both email and password.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
