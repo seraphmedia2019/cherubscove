@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useSiteSettings, getSetting } from '@/hooks/useSiteSettings';
 import logo from '@/assets/logo/logo.png';
 
 export default function WelcomeSection() {
   const ref = useScrollReveal();
+  const s = useSiteSettings();
 
   return (
     <section id="welcome" className="bg-background py-24" ref={ref}>
@@ -24,21 +26,16 @@ export default function WelcomeSection() {
             </div>
           </div>
           <div>
-            <div className="eyebrow reveal">Who We Are</div>
+            <div className="eyebrow reveal">{getSetting(s, 'welcome_eyebrow', 'Who We Are')}</div>
             <h2 className="font-heading text-[clamp(26px,3vw,40px)] font-normal italic leading-[1.3] mt-3 reveal">
               The <em className="not-italic text-primary">Making</em> Place
             </h2>
             <div className="w-12 h-0.5 bg-primary my-8 reveal" />
             <p className="body-text reveal">
-              Cherubs Cove is an interdenominational ministry committed to raising a generation on fire for God.
-              We exist to equip, ignite, and release burning youths into every sphere of society, with the Gospel
-              of Jesus Christ as our foundation and compass.
+              {getSetting(s, 'welcome_paragraph_1', 'Cherubs Cove is an interdenominational ministry committed to raising a generation on fire for God. We exist to equip, ignite, and release burning youths into every sphere of society, with the Gospel of Jesus Christ as our foundation and compass.')}
             </p>
             <p className="body-text mt-4 reveal">
-              We believe the Church must rise to reflect Christ in its fullness, and we are devoted to providing
-              a spiritual environment where every individual finds their place in God's grand narrative. From our
-              gatherings to our flagship International Quivers Conference, everything flows from one conviction:
-              this is the making place.
+              {getSetting(s, 'welcome_paragraph_2', 'We believe the Church must rise to reflect Christ in its fullness, and we are devoted to providing a spiritual environment where every individual finds their place in God\'s grand narrative. From our gatherings to our flagship International Quivers Conference, everything flows from one conviction: this is the making place.')}
             </p>
             <div className="mt-8 flex gap-4 flex-wrap reveal">
               <Link to="/events-conferences" className="btn-solid-custom">

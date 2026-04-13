@@ -11,8 +11,64 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import {
-  Calendar, Download, Image, Settings, Users, LogOut, Plus, Trash2, Edit2, Save, X, Eye, EyeOff, FileDown, ArrowUpDown, ClipboardList,
+  Calendar, Download, Image, Settings, Users, LogOut, Plus, Trash2, Edit2, Save, X, Eye, EyeOff, FileDown, ArrowUpDown, ClipboardList, FileText,
 } from 'lucide-react';
+
+/* ── Content Keys (seed defaults for every editable frontend text) ────── */
+
+const CONTENT_DEFAULTS: { key: string; label: string; value: string; group: string }[] = [
+  // Welcome Section
+  { key: 'welcome_eyebrow', label: 'Welcome — Eyebrow', value: 'Who We Are', group: 'Welcome Section' },
+  { key: 'welcome_paragraph_1', label: 'Welcome — Paragraph 1', value: 'Cherubs Cove is an interdenominational ministry committed to raising a generation on fire for God. We exist to equip, ignite, and release burning youths into every sphere of society, with the Gospel of Jesus Christ as our foundation and compass.', group: 'Welcome Section' },
+  { key: 'welcome_paragraph_2', label: 'Welcome — Paragraph 2', value: "We believe the Church must rise to reflect Christ in its fullness, and we are devoted to providing a spiritual environment where every individual finds their place in God's grand narrative. From our gatherings to our flagship International Quivers Conference, everything flows from one conviction: this is the making place.", group: 'Welcome Section' },
+  // Info Strip
+  { key: 'info_1_label', label: 'Info Strip 1 — Label', value: 'Ministry Type', group: 'Info Strip' },
+  { key: 'info_1_value', label: 'Info Strip 1 — Value', value: 'Interdenominational', group: 'Info Strip' },
+  { key: 'info_1_sub', label: 'Info Strip 1 — Subtitle', value: 'Open to all believers', group: 'Info Strip' },
+  { key: 'info_2_label', label: 'Info Strip 2 — Label', value: 'Events & Conferences', group: 'Info Strip' },
+  { key: 'info_2_value', label: 'Info Strip 2 — Value', value: 'International Quivers Conf.', group: 'Info Strip' },
+  { key: 'info_2_sub', label: 'Info Strip 2 — Subtitle', value: 'Annual gathering', group: 'Info Strip' },
+  { key: 'info_3_label', label: 'Info Strip 3 — Label', value: 'Based In', group: 'Info Strip' },
+  { key: 'info_3_value', label: 'Info Strip 3 — Value', value: 'Nigeria', group: 'Info Strip' },
+  { key: 'info_3_sub', label: 'Info Strip 3 — Subtitle', value: 'Reaching the nations', group: 'Info Strip' },
+  // Events Preview
+  { key: 'events_eyebrow', label: 'Events — Eyebrow', value: 'Programs & Events', group: 'Events Section' },
+  { key: 'events_heading', label: 'Events — Heading (before em)', value: 'Upcoming', group: 'Events Section' },
+  { key: 'events_heading_em', label: 'Events — Heading (italic part)', value: 'Gatherings', group: 'Events Section' },
+  { key: 'events_intro', label: 'Events — Intro Text', value: 'Join us at the International Quivers Conference 2026 — "Envoys of Light." Registration is free and open to all believers.', group: 'Events Section' },
+  { key: 'conf_title', label: 'Conference — Title', value: "QUIVER'S 2026", group: 'Events Section' },
+  { key: 'conf_subtitle', label: 'Conference — Subtitle', value: 'Envoys of Light', group: 'Events Section' },
+  { key: 'conf_venue', label: 'Conference — Venue', value: 'To Be Announced', group: 'Events Section' },
+  { key: 'conf_attendance', label: 'Conference — Attendance', value: 'Free — Open to All', group: 'Events Section' },
+  // About Jesse
+  { key: 'about_eyebrow', label: 'About — Eyebrow', value: 'Meet Our President', group: 'About Page' },
+  { key: 'about_heading', label: 'About — Heading (HTML)', value: 'A Voice. A <em>Vision.</em><br />A Commission.', group: 'About Page' },
+  { key: 'about_name', label: 'About — Name', value: 'Jesse Falodun', group: 'About Page' },
+  { key: 'about_title', label: 'About — Title', value: 'President, Cherubs Cove', group: 'About Page' },
+  { key: 'about_bio_1', label: 'About — Bio Paragraph 1', value: 'Jesse Falodun was born and bred in Kano. He is a young man passionately given to God, with a burning concern for raising high the banner of Christ in every sector of society. His heart beats especially for raising burning youths for the Lord and for the propagation of the Gospel of Christ, particularly within the Cherubim and Seraphim Church.', group: 'About Page' },
+  { key: 'about_bio_2', label: 'About — Bio Paragraph 2', value: "One of Jesse's topmost commissions is seeing the C&S Church perfectly modeled after our Lord Jesus Christ and watching the Church rise to become the one rightly after the Father's heart. Committed to learning the ways of the Lord, he graduated from the International School of Ministry in 2021 and has continued in further pursuit of knowledge in God. He is a dedicated, fervent member of Spirit Life Cherubim and Seraphim Church, Ibadan, Nigeria.", group: 'About Page' },
+  { key: 'about_bio_3', label: 'About — Bio Paragraph 3', value: 'A graduate of Mass Communication from Kogi State University, Jesse is an On-Air Personality (OAP) whose voice has graced several radio stations across Nigeria, including Cool FM Kano, Radio Nigeria Kogi, Fusion FM and Premier FM in Ibadan. He is an anointed Spoken Word Artist who believes deeply in the transforming power of words.', group: 'About Page' },
+  { key: 'about_bio_4', label: 'About — Bio Paragraph 4', value: 'He strikes a unique balance across every dimension of life, engaging also in business as a graphics designer and personal and business branding expert. In his leisure, he loves to write, sing, and take long strolls and prayer walks. He is the convener of the International Quivers Conference.', group: 'About Page' },
+  { key: 'about_tags', label: 'About — Tags (comma-separated)', value: 'Ministry President,Conference Convener,OAP / Broadcaster,Spoken Word Artist,School of Ministry Graduate,C&S Church Member,Brand Designer,Writer', group: 'About Page' },
+  { key: 'about_tags_highlight', label: 'About — Highlighted Tags', value: 'Ministry President,Conference Convener', group: 'About Page' },
+  { key: 'about_cta_title', label: 'About — CTA Title', value: 'Connect with Jesse', group: 'About Page' },
+  { key: 'about_cta_text', label: 'About — CTA Text', value: 'Want to invite Jesse to speak at your event or learn more about Cherubs Cove Ministry?', group: 'About Page' },
+  // Footer
+  { key: 'footer_tagline', label: 'Footer — Tagline', value: 'An interdenominational ministry raising burning youths for the Lord.', group: 'Footer' },
+  // Hero
+  { key: 'hero_verse', label: 'Hero — Scripture Verse', value: 'As arrows are in the hand of a mighty man; so are children of the youth.', group: 'Hero Section' },
+  { key: 'hero_verse_ref', label: 'Hero — Scripture Reference', value: 'Psalm 127:4', group: 'Hero Section' },
+  // Contact
+  { key: 'contact_email', label: 'Contact — Email', value: 'hello@cherubscove.org', group: 'Contact Info' },
+  { key: 'contact_phone', label: 'Contact — Phone', value: '+234 000 000 0000', group: 'Contact Info' },
+  { key: 'location', label: 'Contact — Location', value: 'Nigeria', group: 'Contact Info' },
+  // Social
+  { key: 'facebook_url', label: 'Facebook URL', value: '', group: 'Social Links' },
+  { key: 'instagram_url', label: 'Instagram URL', value: '', group: 'Social Links' },
+  { key: 'youtube_url', label: 'YouTube URL', value: '', group: 'Social Links' },
+  { key: 'twitter_url', label: 'X/Twitter URL', value: '', group: 'Social Links' },
+  { key: 'whatsapp_url', label: 'WhatsApp URL', value: '', group: 'Social Links' },
+];
 
 /* ── Types ──────────────────────────────────────────────────────────────── */
 
@@ -78,6 +134,8 @@ export default function AdminPage() {
   const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
   const [settingsMeta, setSettingsMeta] = useState<{ id: string; key: string; label: string; type: string }[]>([]);
   const [registrations, setRegistrations] = useState<RegistrationRecord[]>([]);
+  const [contentValues, setContentValues] = useState<Record<string, string>>({});
+  const [contentGroup, setContentGroup] = useState('all');
 
   // Editing state
   const [editEvent, setEditEvent] = useState<EventRecord | null>(null);
@@ -153,10 +211,45 @@ export default function AdminPage() {
       setRegistrations(reg.data ?? []);
       const settings = st.data ?? [];
       setSettingsMeta(settings.map((r: any) => ({ id: r.id, key: r.key, label: r.label, type: r.type })));
-      setSiteSettings(settings.reduce((acc: Record<string, string>, r: any) => { acc[r.key] = r.value ?? ''; return acc; }, {}));
+      const settingsMap = settings.reduce((acc: Record<string, string>, r: any) => { acc[r.key] = r.value ?? ''; return acc; }, {});
+      setSiteSettings(settingsMap);
+
+      // Build content values from DB, filling missing with defaults
+      const cv: Record<string, string> = {};
+      CONTENT_DEFAULTS.forEach(cd => { cv[cd.key] = settingsMap[cd.key] ?? cd.value; });
+      setContentValues(cv);
+
+      // Auto-seed missing content keys into DB
+      const existingKeys = new Set(settings.map((r: any) => r.key));
+      const missing = CONTENT_DEFAULTS.filter(cd => !existingKeys.has(cd.key));
+      if (missing.length > 0) {
+        await supabase.from('site_settings').insert(
+          missing.map(cd => ({ key: cd.key, label: cd.label, value: cd.value, type: 'text' }))
+        );
+        // Reload to get IDs
+        const { data: refreshed } = await supabase.from('site_settings').select('*');
+        if (refreshed) {
+          setSettingsMeta(refreshed.map((r: any) => ({ id: r.id, key: r.key, label: r.label, type: r.type })));
+          const refreshedMap = refreshed.reduce((acc: Record<string, string>, r: any) => { acc[r.key] = r.value ?? ''; return acc; }, {});
+          setSiteSettings(refreshedMap);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  /* ── Save Content Setting ──────────────────────────────────────────── */
+
+  const saveContentSetting = async (key: string) => {
+    const meta = settingsMeta.find(s => s.key === key);
+    if (!meta) {
+      toast.error('Setting not found in DB. Try reloading.');
+      return;
+    }
+    const { error } = await supabase.from('site_settings').update({ value: contentValues[key] }).eq('id', meta.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`Saved.`);
   };
 
   /* ── CRUD: Events ────────────────────────────────────────────────────── */
@@ -366,13 +459,14 @@ export default function AdminPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
           {[
             { icon: Calendar, label: 'Events', count: events.length, color: '#E8620A' },
             { icon: Download, label: 'Downloads', count: downloads.length, color: '#B07D35' },
             { icon: Image, label: 'Gallery', count: gallery.length, color: '#6B8F71' },
             { icon: ClipboardList, label: 'Registrations', count: registrations.length, color: '#5B8DEF' },
-            { icon: Settings, label: 'Settings', count: settingsMeta.length, color: '#7B68AE' },
+            { icon: FileText, label: 'Content', count: CONTENT_DEFAULTS.length, color: '#D97706' },
+            { icon: Settings, label: 'Settings', count: settingsMeta.filter(m => !CONTENT_DEFAULTS.some(cd => cd.key === m.key)).length, color: '#7B68AE' },
           ].map(s => (
             <Card key={s.label} className="bg-[#1A1814] border-[#2A2520]">
               <CardContent className="p-4 flex items-center gap-3">
@@ -395,6 +489,7 @@ export default function AdminPage() {
             <TabsTrigger value="downloads" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Download size={14} className="mr-1.5" />Downloads</TabsTrigger>
             <TabsTrigger value="gallery" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Image size={14} className="mr-1.5" />Gallery</TabsTrigger>
             <TabsTrigger value="registrations" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><ClipboardList size={14} className="mr-1.5" />Registrations</TabsTrigger>
+            <TabsTrigger value="content" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><FileText size={14} className="mr-1.5" />Content</TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Settings size={14} className="mr-1.5" />Settings</TabsTrigger>
             <TabsTrigger value="admins" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Users size={14} className="mr-1.5" />Admins</TabsTrigger>
           </TabsList>
@@ -591,12 +686,69 @@ export default function AdminPage() {
             </div>
           </TabsContent>
 
+          {/* ── Content Tab ──────────────────────────────────────────────── */}
+          <TabsContent value="content" className="space-y-4">
+            <div className="flex flex-wrap justify-between items-center gap-3">
+              <div>
+                <h2 className="text-xl font-semibold">Website Content</h2>
+                <p className="text-sm text-[#6B5E50]">Edit all text on the website. Changes update in real-time.</p>
+              </div>
+            </div>
+
+            {/* Group filter */}
+            <div className="flex gap-2 flex-wrap">
+              {['all', ...Array.from(new Set(CONTENT_DEFAULTS.map(c => c.group)))].map(g => (
+                <button
+                  key={g}
+                  onClick={() => setContentGroup(g)}
+                  className={`text-[10px] font-bold tracking-[1.5px] uppercase px-3 py-1.5 rounded-full border transition-colors ${
+                    contentGroup === g ? 'bg-[#E8620A] text-white border-[#E8620A]' : 'border-[#2A2520] text-[#6B5E50] hover:border-[#E8620A]/50'
+                  }`}
+                >
+                  {g === 'all' ? 'All' : g}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-3">
+              {CONTENT_DEFAULTS
+                .filter(cd => contentGroup === 'all' || cd.group === contentGroup)
+                .map(cd => (
+                <Card key={cd.key} className="bg-[#1A1814] border-[#2A2520]">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                      <label className="text-sm font-medium text-[#B5A898]">{cd.label}</label>
+                      <span className="text-[9px] tracking-[1px] uppercase text-[#6B5E50] bg-[#0F0D0A] px-2 py-0.5 rounded">{cd.group}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      {(contentValues[cd.key] ?? '').length > 80 ? (
+                        <Textarea
+                          value={contentValues[cd.key] ?? ''}
+                          onChange={e => setContentValues(prev => ({ ...prev, [cd.key]: e.target.value }))}
+                          className={`flex-1 ${inputCls}`}
+                          rows={3}
+                        />
+                      ) : (
+                        <Input
+                          value={contentValues[cd.key] ?? ''}
+                          onChange={e => setContentValues(prev => ({ ...prev, [cd.key]: e.target.value }))}
+                          className={`flex-1 ${inputCls}`}
+                        />
+                      )}
+                      <Button onClick={() => saveContentSetting(cd.key)} className="bg-[#E8620A] hover:bg-[#cf5709] text-white self-start"><Save size={14} /></Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* ── Settings Tab ─────────────────────────────────────────────── */}
           <TabsContent value="settings" className="space-y-4">
             <h2 className="text-xl font-semibold">Site Settings</h2>
             <p className="text-sm text-[#6B5E50]">Changes here update the website in real-time (contact info, hero scripture, social links, etc.)</p>
             <div className="space-y-4">
-              {settingsMeta.map(meta => (
+              {settingsMeta.filter(m => !CONTENT_DEFAULTS.some(cd => cd.key === m.key)).map(meta => (
                 <Card key={meta.id} className="bg-[#1A1814] border-[#2A2520]">
                   <CardContent className="p-4">
                     <label className="text-sm font-medium text-[#B5A898] block mb-1.5">{meta.label}</label>

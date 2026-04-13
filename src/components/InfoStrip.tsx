@@ -1,27 +1,30 @@
 import { Church, Globe, MapPin } from 'lucide-react';
-
-const items = [
-  {
-    icon: <Church size={22} className="text-primary" />,
-    label: 'Ministry Type',
-    value: 'Interdenominational',
-    sub: 'Open to all believers',
-  },
-  {
-    icon: <Globe size={22} className="text-primary" />,
-    label: 'Events & Conferences',
-    value: 'International Quivers Conf.',
-    sub: 'Annual gathering',
-  },
-  {
-    icon: <MapPin size={22} className="text-primary" />,
-    label: 'Based In',
-    value: 'Nigeria',
-    sub: 'Reaching the nations',
-  },
-];
+import { useSiteSettings, getSetting } from '@/hooks/useSiteSettings';
 
 export default function InfoStrip() {
+  const s = useSiteSettings();
+
+  const items = [
+    {
+      icon: <Church size={22} className="text-primary" />,
+      label: getSetting(s, 'info_1_label', 'Ministry Type'),
+      value: getSetting(s, 'info_1_value', 'Interdenominational'),
+      sub: getSetting(s, 'info_1_sub', 'Open to all believers'),
+    },
+    {
+      icon: <Globe size={22} className="text-primary" />,
+      label: getSetting(s, 'info_2_label', 'Events & Conferences'),
+      value: getSetting(s, 'info_2_value', 'International Quivers Conf.'),
+      sub: getSetting(s, 'info_2_sub', 'Annual gathering'),
+    },
+    {
+      icon: <MapPin size={22} className="text-primary" />,
+      label: getSetting(s, 'info_3_label', 'Based In'),
+      value: getSetting(s, 'info_3_value', 'Nigeria'),
+      sub: getSetting(s, 'info_3_sub', 'Reaching the nations'),
+    },
+  ];
+
   return (
     <div className="bg-bg-alt border-y border-border py-10">
       <div className="container">
