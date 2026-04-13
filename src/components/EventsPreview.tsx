@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useSiteSettings, getSetting } from '@/hooks/useSiteSettings';
 import { supabase } from '@/lib/supabaseClient';
 
 type MiniEvent = { lbl: string; val: string; sub: string };
@@ -23,6 +24,7 @@ type GalleryItem = { image_url?: string; category?: string; title?: string };
 
 export default function EventsPreview() {
   const ref = useScrollReveal();
+  const s = useSiteSettings();
   const [miniEvents, setMiniEvents] = useState<MiniEvent[]>(fallbackMiniEvents);
   const [pastConfs, setPastConfs] = useState<(PastConf & { image_url?: string })[]>(fallbackPastConfs);
 
@@ -65,12 +67,12 @@ export default function EventsPreview() {
     <section className="py-24 bg-background border-t border-border" ref={ref}>
       <div className="container">
         <div className="text-center max-w-[620px] mx-auto">
-          <div className="eyebrow justify-center reveal">Programs & Events</div>
+          <div className="eyebrow justify-center reveal">{getSetting(s, 'events_eyebrow', 'Programs & Events')}</div>
           <h2 className="section-title reveal">
-            Upcoming <em>Gatherings</em>
+            {getSetting(s, 'events_heading', 'Upcoming')} <em>{getSetting(s, 'events_heading_em', 'Gatherings')}</em>
           </h2>
           <p className="body-text reveal">
-            Join us at the International Quivers Conference 2026 — "Envoys of Light." Registration is free and open to all believers.
+            {getSetting(s, 'events_intro', 'Join us at the International Quivers Conference 2026 — "Envoys of Light." Registration is free and open to all believers.')}
           </p>
         </div>
 
@@ -83,10 +85,10 @@ export default function EventsPreview() {
             >
               <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 70% 50%, rgba(232,98,10,0.2), transparent 60%)' }} />
               <div className="font-display text-[clamp(18px,2.5vw,26px)] font-semibold text-primary tracking-[3px] text-center relative z-[1]">
-                QUIVER'S 2026
+                {getSetting(s, 'conf_title', "QUIVER'S 2026")}
               </div>
               <div className="font-heading text-[14px] italic tracking-wider relative z-[1] text-white/65">
-                "Envoys of Light"
+                "{getSetting(s, 'conf_subtitle', 'Envoys of Light')}"
               </div>
             </div>
             <div className="p-6">
@@ -95,14 +97,14 @@ export default function EventsPreview() {
                   <Calendar size={14} className="text-primary" />
                   <div>
                     <div className="text-[9px] font-bold tracking-[2px] uppercase text-muted-foreground mb-0.5">Venue</div>
-                    <div className="text-sm text-foreground">To Be Announced</div>
+                    <div className="text-sm text-foreground">{getSetting(s, 'conf_venue', 'To Be Announced')}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock size={14} className="text-primary" />
                   <div>
                     <div className="text-[9px] font-bold tracking-[2px] uppercase text-muted-foreground mb-0.5">Attendance</div>
-                    <div className="text-sm text-foreground">Free — Open to All</div>
+                    <div className="text-sm text-foreground">{getSetting(s, 'conf_attendance', 'Free — Open to All')}</div>
                   </div>
                 </div>
               </div>
