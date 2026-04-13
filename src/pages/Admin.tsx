@@ -459,13 +459,14 @@ export default function AdminPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
           {[
             { icon: Calendar, label: 'Events', count: events.length, color: '#E8620A' },
             { icon: Download, label: 'Downloads', count: downloads.length, color: '#B07D35' },
             { icon: Image, label: 'Gallery', count: gallery.length, color: '#6B8F71' },
             { icon: ClipboardList, label: 'Registrations', count: registrations.length, color: '#5B8DEF' },
-            { icon: Settings, label: 'Settings', count: settingsMeta.length, color: '#7B68AE' },
+            { icon: FileText, label: 'Content', count: CONTENT_DEFAULTS.length, color: '#D97706' },
+            { icon: Settings, label: 'Settings', count: settingsMeta.filter(m => !CONTENT_DEFAULTS.some(cd => cd.key === m.key)).length, color: '#7B68AE' },
           ].map(s => (
             <Card key={s.label} className="bg-[#1A1814] border-[#2A2520]">
               <CardContent className="p-4 flex items-center gap-3">
