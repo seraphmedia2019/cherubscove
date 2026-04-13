@@ -488,6 +488,7 @@ export default function AdminPage() {
             <TabsTrigger value="downloads" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Download size={14} className="mr-1.5" />Downloads</TabsTrigger>
             <TabsTrigger value="gallery" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Image size={14} className="mr-1.5" />Gallery</TabsTrigger>
             <TabsTrigger value="registrations" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><ClipboardList size={14} className="mr-1.5" />Registrations</TabsTrigger>
+            <TabsTrigger value="content" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><FileText size={14} className="mr-1.5" />Content</TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Settings size={14} className="mr-1.5" />Settings</TabsTrigger>
             <TabsTrigger value="admins" className="data-[state=active]:bg-[#E8620A] data-[state=active]:text-white text-[#B5A898]"><Users size={14} className="mr-1.5" />Admins</TabsTrigger>
           </TabsList>
@@ -684,12 +685,69 @@ export default function AdminPage() {
             </div>
           </TabsContent>
 
+          {/* ── Content Tab ──────────────────────────────────────────────── */}
+          <TabsContent value="content" className="space-y-4">
+            <div className="flex flex-wrap justify-between items-center gap-3">
+              <div>
+                <h2 className="text-xl font-semibold">Website Content</h2>
+                <p className="text-sm text-[#6B5E50]">Edit all text on the website. Changes update in real-time.</p>
+              </div>
+            </div>
+
+            {/* Group filter */}
+            <div className="flex gap-2 flex-wrap">
+              {['all', ...Array.from(new Set(CONTENT_DEFAULTS.map(c => c.group)))].map(g => (
+                <button
+                  key={g}
+                  onClick={() => setContentGroup(g)}
+                  className={`text-[10px] font-bold tracking-[1.5px] uppercase px-3 py-1.5 rounded-full border transition-colors ${
+                    contentGroup === g ? 'bg-[#E8620A] text-white border-[#E8620A]' : 'border-[#2A2520] text-[#6B5E50] hover:border-[#E8620A]/50'
+                  }`}
+                >
+                  {g === 'all' ? 'All' : g}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-3">
+              {CONTENT_DEFAULTS
+                .filter(cd => contentGroup === 'all' || cd.group === contentGroup)
+                .map(cd => (
+                <Card key={cd.key} className="bg-[#1A1814] border-[#2A2520]">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                      <label className="text-sm font-medium text-[#B5A898]">{cd.label}</label>
+                      <span className="text-[9px] tracking-[1px] uppercase text-[#6B5E50] bg-[#0F0D0A] px-2 py-0.5 rounded">{cd.group}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      {(contentValues[cd.key] ?? '').length > 80 ? (
+                        <Textarea
+                          value={contentValues[cd.key] ?? ''}
+                          onChange={e => setContentValues(prev => ({ ...prev, [cd.key]: e.target.value }))}
+                          className={`flex-1 ${inputCls}`}
+                          rows={3}
+                        />
+                      ) : (
+                        <Input
+                          value={contentValues[cd.key] ?? ''}
+                          onChange={e => setContentValues(prev => ({ ...prev, [cd.key]: e.target.value }))}
+                          className={`flex-1 ${inputCls}`}
+                        />
+                      )}
+                      <Button onClick={() => saveContentSetting(cd.key)} className="bg-[#E8620A] hover:bg-[#cf5709] text-white self-start"><Save size={14} /></Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* ── Settings Tab ─────────────────────────────────────────────── */}
           <TabsContent value="settings" className="space-y-4">
             <h2 className="text-xl font-semibold">Site Settings</h2>
             <p className="text-sm text-[#6B5E50]">Changes here update the website in real-time (contact info, hero scripture, social links, etc.)</p>
             <div className="space-y-4">
-              {settingsMeta.map(meta => (
+              {settingsMeta.filter(m => !CONTENT_DEFAULTS.some(cd => cd.key === m.key)).map(meta => (
                 <Card key={meta.id} className="bg-[#1A1814] border-[#2A2520]">
                   <CardContent className="p-4">
                     <label className="text-sm font-medium text-[#B5A898] block mb-1.5">{meta.label}</label>
